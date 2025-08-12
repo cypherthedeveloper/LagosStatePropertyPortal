@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagos State Property Portal API Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .endpoint-group {
+            margin-bottom: 30px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .response {
+            margin-top: 10px;
+            min-height: 50px;
+        }
+        .success {
+            color: #27ae60;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lagos State Property Portal API Demo</h1>
+    <p>This page demonstrates how to interact with the Lagos State Property Portal API using JavaScript.</p>
+    
+    <div id="token-display">
+        <p><strong>JWT Token:</strong> <span id="jwt-token">Not logged in</span></p>
+    </div>
+
+    <div class="endpoint-group">
+        <h2>Authentication</h2>
+        
+        <div class="form-group">
+            <h3>Register</h3>
+            <label for="register-name">Name:</label>
+            <input type="text" id="register-name" value="Test User">
+            
+            <label for="register-email">Email:</label>
+            <input type="email" id="register-email" value="testuser@example.com">
+            
+            <label for="register-password">Password:</label>
+            <input type="password" id="register-password" value="securepassword">
+            
+            <label for="register-role">Role:</label>
+            <select id="register-role">
+                <option value="buyer_renter">Buyer/Renter</option>
+                <option value="owner">Property Owner</option>
+                <option value="firm">Real Estate Firm</option>
+                <option value="government">Government Agency</option>
+                <option value="admin">Admin</option>
+            </select>
+            
+            <button onclick="register()">Register</button>
+            <div id="register-response" class="response"></div>
+        </div>
+        
+        <div class="form-group">
+            <h3>Login</h3>
+            <label for="login-email">Email:</label>
+            <input type="email" id="login-email" value="testuser@example.com">
+            
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" value="securepassword">
+            
+            <button onclick="login()">Login</button>
+            <div id="login-response" class="response"></div>
+        </div>
+        
+        <div class="form-group">
+            <h3>Get Profile</h3>
+            <button onclick="getProfile()">Get Profile</button>
+            <div id="profile-response" class="response"></div>
+        </div>
+    </div>
+
+    <div class="endpoint-group">
+        <h2>Properties</h2>
+        
+        <div class="form-group">
+            <h3>List Properties</h3>
+            <label for="property-location">Location:</label>
+            <input type="text" id="property-location" value="Lekki">
+            
+            <label for="property-price-min">Min Price:</label>
+            <input type="number" id="property-price-min" value="10000000">
+            
+            <label for="property-price-max">Max Price:</label>
+            <input type="number" id="property-price-max" value="50000000">
+            
+            <label for="property-type">Type:</label>
+            <select id="property-type">
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+            </select>
+            
+            <button onclick="listProperties()">List Properties</button>
+            <div id="list-properties-response" class="response"></div>
+        </div>
+        
+        <div class="form-group">
+            <h3>Get Property Details</h3>
+            <label for="property-id">Property ID:</label>
+            <input type="number" id="property-id" value="1">
+            
+            <button onclick="getPropertyDetails()">Get Property Details</button>
+            <div id="property-details-response" class="response"></div>
+        </div>
+        
+        <div class="form-group">
+            <h3>Create Property</h3>
+            <label for="create-property-title">Title:</label>
+            <input type="text" id="create-property-title" value="Test Property">
+            
+            <label for="create-property-description">Description:</label>
+            <input type="text" id="create-property-description" value="A test property listing">
+            
+            <label for="create-property-price">Price:</label>
+            <input type="number" id="create-property-price" value="20000000">
+            
+            <label for="create-property-type">Type:</label>
+            <select id="create-property-type">
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+            </select>
+            
+            <label for="create-property-location">Location:</label>
+            <input type="text" id="create-property-location" value="Lekki Phase 1, Lagos">
+            
+            <button onclick="createProperty()">Create Property</button>
+            <div id="create-property-response" class="response"></div>
+        </div>
+    </div>
+
+    <div class="endpoint-group">
+        <h2>Favorites</h2>
+        
+        <div class="form-group">
+            <h3>Add to Favorites</h3>
+            <label for="favorite-property-id">Property ID:</label>
+            <input type="number" id="favorite-property-id" value="1">
+            
+            <button onclick="addToFavorites()">Add to Favorites</button>
+            <div id="add-favorite-response" class="response"></div>
+        </div>
+        
+        <div class="form-group">
+            <h3>List Favorites</h3>
+            <button onclick="listFavorites()">List Favorites</button>
+            <div id="list-favorites-response" class="response"></div>
+        </div>
+    </div>
+
+    <div class="endpoint-group">
+        <h2>Leads & Messaging</h2>
+        
+        <div class="form-group">
+            <h3>Create Lead</h3>
+            <label for="lead-property-id">Property ID:</label>
+            <input type="number" id="lead-property-id" value="1">
+            
+            <label for="lead-message">Message:</label>
+            <input type="text" id="lead-message" value="I'm interested in this property. Can I schedule a viewing?">
+            
+            <button onclick="createLead()">Create Lead</button>
+            <div id="create-lead-response" class="response"></div>
+        </div>
+    </div>
+
+    <div class="endpoint-group">
+        <h2>Payments</h2>
+        
+        <div class="form-group">
+            <h3>Initiate Payment</h3>
+            <label for="payment-property-id">Property ID:</label>
+            <input type="number" id="payment-property-id" value="1">
+            
+            <label for="payment-amount">Amount:</label>
+            <input type="number" id="payment-amount" value="50000">
+            
+            <label for="payment-type">Type:</label>
+            <select id="payment-type">
+                <option value="rent">Rent</option>
+                <option value="purchase">Purchase</option>
+            </select>
+            
+            <button onclick="initiatePayment()">Initiate Payment</button>
+            <div id="initiate-payment-response" class="response"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for the API
+        const BASE_URL = 'http://localhost:8000/api/v1';
+        
+        // Store the JWT token
+        let token = localStorage.getItem('jwt_token');
+        if (token) {
+            document.getElementById('jwt-token').textContent = token.substring(0, 10) + '...';
+        }
+        
+        // Helper function to display response
+        function displayResponse(elementId, response, isError = false) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<pre class="${isError ? 'error' : 'success'}">${JSON.stringify(response, null, 2)}</pre>`;
+        }
+        
+        // Helper function to make API requests
+        async function apiRequest(endpoint, method = 'GET', data = null, requiresAuth = false) {
+            try {
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                
+                if (requiresAuth) {
+                    if (!token) {
+                        return { error: 'Authentication required. Please login first.' };
+                    }
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+                
+                const options = {
+                    method,
+                    headers
+                };
+                
+                if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                let url = `${BASE_URL}${endpoint}`;
+                if (data && method === 'GET') {
+                    const params = new URLSearchParams();
+                    for (const key in data) {
+                        if (Array.isArray(data[key])) {
+                            data[key].forEach(value => params.append(`${key}[]`, value));
+                        } else {
+                            params.append(key, data[key]);
+                        }
+                    }
+                    url += `?${params.toString()}`;
+                }
+                
+                const response = await fetch(url, options);
+                const responseData = await response.json();
+                
+                return responseData;
+            } catch (error) {
+                console.error('API Request Error:', error);
+                return { error: error.message };
+            }
+        }
+        
+        // Authentication functions
+        async function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const role = document.getElementById('register-role').value;
+            
+            const data = { name, email, password, role };
+            const response = await apiRequest('/auth/register', 'POST', data);
+            
+            displayResponse('register-response', response, response.error);
+            
+            if (response.token) {
+                token = response.token;
+                localStorage.setItem('jwt_token', token);
+                document.getElementById('jwt-token').textContent = token.substring(0, 10) + '...';
+            }
+        }
+        
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const data = { email, password };
+            const response = await apiRequest('/auth/login', 'POST', data);
+            
+            displayResponse('login-response', response, response.error);
+            
+            if (response.token) {
+                token = response.token;
+                localStorage.setItem('jwt_token', token);
+                document.getElementById('jwt-token').textContent = token.substring(0, 10) + '...';
+            }
+        }
+        
+        async function getProfile() {
+            const response = await apiRequest('/auth/profile', 'GET', null, true);
+            displayResponse('profile-response', response, response.error);
+        }
+        
+        // Property functions
+        async function listProperties() {
+            const location = document.getElementById('property-location').value;
+            const price_min = document.getElementById('property-price-min').value;
+            const price_max = document.getElementById('property-price-max').value;
+            const type = document.getElementById('property-type').value;
+            
+            const data = { location, price_min, price_max, type, 'amenities[]': ['Swimming Pool', 'Security'] };
+            const response = await apiRequest('/properties', 'GET', data);
+            
+            displayResponse('list-properties-response', response, response.error);
+        }
+        
+        async function getPropertyDetails() {
+            const propertyId = document.getElementById('property-id').value;
+            const response = await apiRequest(`/properties/${propertyId}`, 'GET');
+            
+            displayResponse('property-details-response', response, response.error);
+        }
+        
+        async function createProperty() {
+            const title = document.getElementById('create-property-title').value;
+            const description = document.getElementById('create-property-description').value;
+            const price = document.getElementById('create-property-price').value;
+            const type = document.getElementById('create-property-type').value;
+            const location = document.getElementById('create-property-location').value;
+            
+            const data = {
+                title,
+                description,
+                price: parseInt(price),
+                type,
+                location,
+                amenities: ['Swimming Pool', '24/7 Electricity', 'Security'],
+                images: [],
+                documents: []
+            };
+            
+            const response = await apiRequest('/properties', 'POST', data, true);
+            displayResponse('create-property-response', response, response.error);
+        }
+        
+        // Favorites functions
+        async function addToFavorites() {
+            const propertyId = document.getElementById('favorite-property-id').value;
+            const data = { property_id: parseInt(propertyId) };
+            
+            const response = await apiRequest('/favorites', 'POST', data, true);
+            displayResponse('add-favorite-response', response, response.error);
+        }
+        
+        async function listFavorites() {
+            const response = await apiRequest('/favorites', 'GET', null, true);
+            displayResponse('list-favorites-response', response, response.error);
+        }
+        
+        // Leads functions
+        async function createLead() {
+            const propertyId = document.getElementById('lead-property-id').value;
+            const message = document.getElementById('lead-message').value;
+            
+            const data = {
+                property_id: parseInt(propertyId),
+                message
+            };
+            
+            const response = await apiRequest('/leads', 'POST', data, true);
+            displayResponse('create-lead-response', response, response.error);
+        }
+        
+        // Payments functions
+        async function initiatePayment() {
+            const propertyId = document.getElementById('payment-property-id').value;
+            const amount = document.getElementById('payment-amount').value;
+            const type = document.getElementById('payment-type').value;
+            
+            const data = {
+                property_id: parseInt(propertyId),
+                amount: parseInt(amount),
+                type
+            };
+            
+            const response = await apiRequest('/payments/initiate', 'POST', data, true);
+            displayResponse('initiate-payment-response', response, response.error);
+        }
+    </script>
+</body>
+</html>

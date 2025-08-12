@@ -1,0 +1,667 @@
+{
+  "info": {
+    "_postman_id": "b5e8d5a0-6e1c-4e5b-8d5a-0e6e1c4e5b8d",
+    "name": "Lagos State Property Portal API",
+    "description": "A collection for testing the Lagos State Property Portal API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword\",\n  \"role\": \"buyer_renter\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"securepassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login and receive JWT token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Get logged-in user profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"+2348012345678\",\n  \"avatar\": \"base64_encoded_image_or_url\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Update profile information"
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication and user management endpoints"
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "List Properties",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/properties?location=Lekki&price_min=10000000&price_max=50000000&type=residential&amenities[]=Swimming Pool&amenities[]=Security",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "location",
+                  "value": "Lekki"
+                },
+                {
+                  "key": "price_min",
+                  "value": "10000000"
+                },
+                {
+                  "key": "price_max",
+                  "value": "50000000"
+                },
+                {
+                  "key": "type",
+                  "value": "residential"
+                },
+                {
+                  "key": "amenities[]",
+                  "value": "Swimming Pool"
+                },
+                {
+                  "key": "amenities[]",
+                  "value": "Security"
+                }
+              ]
+            },
+            "description": "List all properties with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Property Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "1"]
+            },
+            "description": "Get single property details"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Property",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"3 Bedroom Apartment in Lekki\",\n  \"description\": \"Luxurious 3 bedroom apartment with excellent facilities...\",\n  \"price\": 25000000,\n  \"type\": \"residential\",\n  \"location\": \"Lekki Phase 1, Lagos\",\n  \"amenities\": [\"Swimming Pool\", \"24/7 Electricity\", \"Security\"],\n  \"images\": [\"base64_encoded_image1\", \"base64_encoded_image2\"],\n  \"documents\": [\"base64_encoded_document1\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties",
+              "host": ["{{base_url}}"],
+              "path": ["properties"]
+            },
+            "description": "Create property listing"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Property",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"3 Bedroom Apartment in Lekki\",\n  \"description\": \"Luxurious 3 bedroom apartment with excellent facilities and newly renovated...\",\n  \"price\": 27000000,\n  \"type\": \"residential\",\n  \"location\": \"Lekki Phase 1, Lagos\",\n  \"amenities\": [\"Swimming Pool\", \"24/7 Electricity\", \"Security\", \"Gym\"],\n  \"images\": [\"base64_encoded_image1\", \"base64_encoded_image2\"],\n  \"documents\": [\"base64_encoded_document1\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "1"]
+            },
+            "description": "Update property listing"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "1"]
+            },
+            "description": "Delete property listing"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Property",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"verified\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties/1/verify",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "1", "verify"]
+            },
+            "description": "Approve/Reject verification"
+          },
+          "response": []
+        }
+      ],
+      "description": "Property management endpoints"
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "List Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"]
+            },
+            "description": "List user favorites"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"property_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"]
+            },
+            "description": "Add to favorites"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites/1",
+              "host": ["{{base_url}}"],
+              "path": ["favorites", "1"]
+            },
+            "description": "Remove from favorites"
+          },
+          "response": []
+        }
+      ],
+      "description": "Favorites management endpoints"
+    },
+    {
+      "name": "Leads & Messaging",
+      "item": [
+        {
+          "name": "Create Lead",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"property_id\": 1,\n  \"message\": \"I'm interested in this property. Can I schedule a viewing?\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leads",
+              "host": ["{{base_url}}"],
+              "path": ["leads"]
+            },
+            "description": "Create a new lead"
+          },
+          "response": []
+        },
+        {
+          "name": "List Leads",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leads",
+              "host": ["{{base_url}}"],
+              "path": ["leads"]
+            },
+            "description": "List leads (for owners/firms)"
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lead_id\": 1,\n  \"message\": \"Yes, we can arrange a viewing for tomorrow at 2 PM.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/messages",
+              "host": ["{{base_url}}"],
+              "path": ["messages"]
+            },
+            "description": "Send a message"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Conversation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/messages/1",
+              "host": ["{{base_url}}"],
+              "path": ["messages", "1"]
+            },
+            "description": "Get conversation"
+          },
+          "response": []
+        }
+      ],
+      "description": "Leads and messaging endpoints"
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"property_id\": 1,\n  \"amount\": 50000,\n  \"type\": \"rent\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/initiate",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "initiate"]
+            },
+            "description": "Start payment (rent/purchase)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction_id\": \"txn_123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/verify",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "verify"]
+            },
+            "description": "Verify payment callback"
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Utility Bills",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"property_id\": 1,\n  \"bill_type\": \"electricity\",\n  \"amount\": 5000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/utilities",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "utilities"]
+            },
+            "description": "Pay utility bills"
+          },
+          "response": []
+        },
+        {
+          "name": "View Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transactions",
+              "host": ["{{base_url}}"],
+              "path": ["transactions"]
+            },
+            "description": "View transaction history"
+          },
+          "response": []
+        }
+      ],
+      "description": "Payment and transaction endpoints"
+    },
+    {
+      "name": "Government & Admin",
+      "item": [
+        {
+          "name": "List Unverified Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/compliance/unverified",
+              "host": ["{{base_url}}"],
+              "path": ["compliance", "unverified"]
+            },
+            "description": "List unverified properties"
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Compliance Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/compliance/reports?start_date=2023-01-01&end_date=2023-12-31",
+              "host": ["{{base_url}}"],
+              "path": ["compliance", "reports"],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2023-01-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2023-12-31"
+                }
+              ]
+            },
+            "description": "Generate compliance report"
+          },
+          "response": []
+        },
+        {
+          "name": "List All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"]
+            },
+            "description": "List all users"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"owner\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "1"]
+            },
+            "description": "Update user role/status"
+          },
+          "response": []
+        }
+      ],
+      "description": "Government and admin endpoints"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    }
+  ]
+}
